@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Formulir Data Taaruf</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f3ec;--card:#fffdf8;--ink:#23332b;--mut:#6b7a71;--acc:#2f6b4f;--acc2:#e8f0ea;--line:#ddd6c6;--err:#b3382c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b17;--card:#1c2620;--ink:#e9efe9;--mut:#9aaaa0;--acc:#6fbf94;--acc2:#233229;--line:#2f3d34;--err:#ef8b7e}}
+:root[data-theme="dark"]{--bg:#141b17;--card:#1c2620;--ink:#e9efe9;--mut:#9aaaa0;--acc:#6fbf94;--acc2:#233229;--line:#2f3d34;--err:#ef8b7e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55}
+.wrap{max-width:640px;margin:0 auto;padding:24px 16px 48px}
+header{text-align:center;margin-bottom:20px}
+header .bis{font-size:14px;color:var(--mut);letter-spacing:.04em}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin:6px 0}
+header p{color:var(--mut);margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+label.q,.q{display:block;font-weight:600;margin-bottom:8px}
+.q small{font-weight:400;color:var(--mut)}
+input[type=text],input[type=number],textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--acc);border-color:transparent}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opts label{flex:1 1 120px;display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:var(--bg)}
+.opts input{accent-color:var(--acc)}
+.opts label:has(input:checked){background:var(--acc2);border-color:var(--acc)}
+.sub{margin-top:10px;display:none}
+.sub.on{display:block}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+.err{color:var(--err);font-size:13px;margin-top:6px;display:none}
+.bad .err{display:block}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;font-weight:600}
+.primary{background:var(--acc);color:#fff;width:100%;font-size:16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .primary{color:#10201a}}
+:root[data-theme="dark"] .primary{color:#10201a}
+.ghost{background:var(--acc2);color:var(--ink);border:1px solid var(--line)}
+.note{font-size:13px;color:var(--mut);text-align:center;margin-top:12px}
+#result{display:none}
+#result pre{white-space:pre-wrap;word-wrap:break-word;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;font:14px/1.6 inherit;max-height:380px;overflow:auto}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.acts button,.acts a{flex:1 1 140px;text-align:center;text-decoration:none}
+.acts a{display:block;padding:12px 18px;border-radius:10px;font-weight:600;background:var(--acc);color:#fff}
+#status{font-size:13px;color:var(--mut);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="bis">بسم الله الرحمن الرحيم</div>
+  <h1>Formulir Data Taaruf</h1>
+  <p>Isi dengan jujur dan apa adanya. Data hanya dipakai untuk proses perkenalan.</p>
+</header>
+
+<div id="formView">
+<div class="card" data-req>
+  <label class="q" for="nama">Nama lengkap</label>
+  <input type="text" id="nama" autocomplete="name" placeholder="Nama sesuai KTP">
+  <div class="err">Nama wajib diisi.</div>
+</div>
+
+<div class="card">
+  <div class="row">
+    <div data-req>
+      <label class="q" for="usia">Usia</label>
+      <input type="number" id="usia" min="17" max="99" inputmode="numeric" placeholder="mis. 27">
+      <div class="err">Isi usia (17–99).</div>
+    </div>
+    <div data-req>
+      <label class="q" for="asal">Asal</label>
+      <input type="text" id="asal" placeholder="Kota/daerah asal">
+      <div class="err">Asal wajib diisi.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card" data-req>
+  <label class="q" for="kerja">Pekerjaan atau kesibukan</label>
+  <input type="text" id="kerja" placeholder="mis. karyawan swasta, kuliah, wirausaha">
+  <div class="err">Pekerjaan/kesibukan wajib diisi.</div>
+</div>
+
+<div class="card" data-req>
+  <div class="q">Apakah kamu punya anak?</div>
+  <div class="opts">
+    <label><input type="radio" name="anak" value="Tidak"> Tidak</label>
+    <label><input type="radio" name="anak" value="Ya"> Ya</label>
+  </div>
+  <div class="sub" id="subAnak">
+    <input type="text" id="anakDetail" placeholder="Jumlah & usia anak (mis. 1 anak, 4 tahun)">
+  </div>
+  <div class="err">Pilih salah satu.</div>
+</div>
+
+<div class="card" data-req>
+  <div class="q">Apakah kamu sedang dalam suatu hubungan?</div>
+  <div class="opts">
+    <label><input type="radio" name="hub" value="Tidak"> Tidak</label>
+    <label><input type="radio" name="hub" value="Ya"> Ya</label>
+  </div>
+  <div class="sub" id="subHub">
+    <input type="text" id="hubDetail" placeholder="Jelaskan singkat statusnya">
+  </div>
+  <div class="err">Pilih salah satu.</div>
+</div>
+
+<div class="card" data-req>
+  <label class="q" for="kesal">Kalau sedang kesal sama pasangan, biasanya kamu ngapain?</label>
+  <textarea id="kesal" placeholder="Ceritakan kebiasaanmu: diam dulu, langsung bicara, menyendiri, dll."></textarea>
+  <div class="err">Jawaban wajib diisi.</div>
+</div>
+
+<div class="card" data-req>
+  <label class="q" for="sakit">Kalau nanti pasanganmu bilang dia sakit hati dengan sikapmu, kamu bagaimana?</label>
+  <textarea id="sakit" placeholder="Jawab sejujurnya, bagaimana kamu menanggapi dan memperbaikinya."></textarea>
+  <div class="err">Jawaban wajib diisi.</div>
+</div>
+
+<button class="primary" id="kirim">Kirim Data</button>
+<div class="note">Jawabanmu akan tampil sebagai ringkasan yang bisa disalin atau dikirim lewat WhatsApp.</div>
+</div>
+
+<div id="result" class="card">
+  <h2 style="margin-top:0;font-family:Georgia,serif">Terima kasih 🤍</h2>
+  <p style="color:var(--mut);margin-top:0">Ini ringkasan datamu. Silakan kirim ke pihak yang memfasilitasi taaruf.</p>
+  <pre id="ringkas"></pre>
+  <div class="acts">
+    <button class="ghost" id="salin">Salin</button>
+    <button class="ghost" id="unduh">Unduh .txt</button>
+    <a id="wa" href="#" target="_blank" rel="noopener">Kirim via WhatsApp</a>
+  </div>
+  <div id="status"></div>
+  <div class="acts"><button class="ghost" id="ulang">Isi ulang</button></div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const val=n=>(document.querySelector('input[name="'+n+'"]:checked')||{}).value||'';
+function toggleSub(){
+  $('subAnak').classList.toggle('on',val('anak')==='Ya');
+  $('subHub').classList.toggle('on',val('hub')==='Ya');
+}
+document.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change',toggleSub));
+
+function validate(){
+  const ok={};
+  const u=parseInt($('usia').value,10);
+  ok.nama=$('nama').value.trim()!=='';
+  ok.usia=u>=17&&u<=99;
+  ok.asal=$('asal').value.trim()!=='';
+  ok.kerja=$('kerja').value.trim()!=='';
+  ok.anak=val('anak')!=='';
+  ok.hub=val('hub')!=='';
+  ok.kesal=$('kesal').value.trim()!=='';
+  ok.sakit=$('sakit').value.trim()!=='';
+  const map={nama:'nama',usia:'usia',asal:'asal',kerja:'kerja',anak:'subAnak',hub:'subHub',kesal:'kesal',sakit:'sakit'};
+  let first=null;
+  Object.keys(map).forEach(k=>{
+    const host=$(map[k]).closest('[data-req]');
+    host.classList.toggle('bad',!ok[k]);
+    if(!ok[k]&&!first)first=host;
+  });
+  if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+  return !first;
+}
+let teks='';
+function susun(){
+  const anak=val('anak')==='Ya'?'Ya'+($('anakDetail').value.trim()?' ('+$('anakDetail').value.trim()+')':''):'Tidak';
+  const hub=val('hub')==='Ya'?'Ya'+($('hubDetail').value.trim()?' ('+$('hubDetail').value.trim()+')':''):'Tidak';
+  return [
+    'DATA TAARUF',
+    '',
+    'Nama lengkap: '+$('nama').value.trim(),
+    'Usia: '+$('usia').value.trim(),
+    'Asal: '+$('asal').value.trim(),
+    'Pekerjaan/kesibukan: '+$('kerja').value.trim(),
+    'Punya anak: '+anak,
+    'Sedang dalam hubungan: '+hub,
+    '',
+    'Kalau kesal sama pasangan biasanya:',
+    $('kesal').value.trim(),
+    '',
+    'Kalau pasangan bilang sakit hati dengan sikapku:',
+    $('sakit').value.trim()
+  ].join('\n');
+}
+$('kirim').addEventListener('click',async()=>{
+  if(!validate())return;
+  teks=susun();
+  $('ringkas').textContent=teks;
+  $('wa').href='https://wa.me/?text='+encodeURIComponent(teks);
+  $('formView').style.display='none';
+  $('result').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  // simpan ke database jika tersedia (opsional)
+  try{
+    const db=await claude.use('db');
+    if(db){
+      const id='r'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      await db.collection('responses').doc(id).set({
+        nama:$('nama').value.trim(),usia:parseInt($('usia').value,10),asal:$('asal').value.trim(),
+        kerja:$('kerja').value.trim(),anak:val('anak')==='Ya'?'Ya: '+$('anakDetail').value.trim():'Tidak',
+        hubungan:val('hub')==='Ya'?'Ya: '+$('hubDetail').value.trim():'Tidak',
+        kesal:$('kesal').value.trim(),sakitHati:$('sakit').value.trim(),waktu:new Date().toISOString()
+      });
+      $('status').textContent='✓ Jawaban juga tersimpan.';
+    }
+  }catch(e){}
+});
+$('salin').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(teks);$('status').textContent='✓ Tersalin.';}
+  catch(e){const r=document.createRange();r.selectNodeContents($('ringkas'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('status').textContent='Teks terpilih, silakan salin manual.';}
+});
+$('unduh').addEventListener('click',async()=>{
+  try{
+    const d=await claude.use('downloads');
+    if(d){await d.save({filename:'data-taaruf.txt',data:new Blob([teks],{type:'text/plain'})});return;}
+  }catch(e){}
+  $('status').textContent='Unduhan tidak tersedia di sini, gunakan tombol Salin.';
+});
+$('ulang').addEventListener('click',()=>{
+  document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(e=>e.value='');
+  document.querySelectorAll('input[type=radio]').forEach(e=>e.checked=false);
+  toggleSub();$('status').textContent='';
+  $('result').style.display='none';$('formView').style.display='block';
+});
+</script>
+</body>
+</html>
